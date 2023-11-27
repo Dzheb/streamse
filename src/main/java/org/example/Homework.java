@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Homework {
@@ -44,6 +45,18 @@ public class Homework {
         List<Employee> employees = generateRandomEmployees();
         // Вывести список всех различных отделов (department) по списку сотрудников
         System.out.println("Departments: ");
+//        Map<String, Long> result
+//            = g.stream().collect(
+//                Collectors.groupingBy(
+//                    Function.identity(),
+//                    Collectors.counting()));
+        System.out.println("Grouping example: ");
+        Map<String,List<Employee>> depars = employees.stream()
+                        .collect(Collectors
+                        .groupingBy(emp -> emp.department ));
+        depars.forEach((key, value) ->
+                System.out.println(key + " " + value));
+
         List<String> deps = employees.stream()
                 .map(Employee::getDepartment).distinct()
                 .toList();
@@ -74,7 +87,7 @@ public class Homework {
         for (String dep : deps) {
             Double mean = employees.stream()
                     .filter(d -> d.getDepartment().equals(dep))
-                    .map(s -> s.getSalary()).mapToDouble(a -> a).average().getAsDouble();
+                    .map(Employee::getSalary).mapToDouble(a -> a).average().getAsDouble();
             depsWithSalaries.put(dep, mean);
         }
         depsWithSalaries.forEach((key, value) ->
@@ -101,10 +114,6 @@ public class Homework {
                 new Employee("Chris Ree", 29, 2000, "IT")
 
         );
-    }
-
-    static Integer myComparator(Integer a, Integer b) {
-        return (a - b);
     }
 
 }
